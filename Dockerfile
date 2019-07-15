@@ -12,12 +12,12 @@ RUN sed -i -e "s/^Listen 80/Listen 8080/" /etc/apache2/httpd.conf && sed -ri -e 
 rm -rf /var/www/localhost/htdocs/* /etc/localtime && \
 rm -rf /var/cache/apk/*
 COPY s2i/bin/ /usr/libexec/s2i
-RUN touch /etc/localtime /etc/timezone && \
-chown -R apache /var/www/localhost/htdocs /usr/libexec/s2i /etc/localtime /etc/timezone /var/www/logs/ /run/apache2 /etc/apache2/  && \
+RUN usermod -u 1001 apache && touch /etc/localtime /etc/timezone && \
+chown -R 1001 /var/www/localhost/htdocs /usr/libexec/s2i /etc/localtime /etc/timezone /var/www/logs/ /run/apache2 /etc/apache2/  && \
 chgrp -R 0 /var/www/localhost/htdocs /usr/libexec/s2i /etc/localtime /etc/timezone /var/www/logs/ /run/apache2 /etc/apache2/  && \
 chmod -R g=u /var/www/localhost/htdocs /usr/libexec/s2i /etc/localtime /etc/timezone /var/www/logs/ /run/apache2 /etc/apache2/
 WORKDIR /var/www/localhost/htdocs
-USER apache
+USER 1001
 EXPOSE 8080
 CMD ["/usr/libexec/s2i/usage"]
 
